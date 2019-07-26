@@ -1,35 +1,37 @@
 openapi: 3.0.1
 info:
   title: k8beltester
-  description: 'This is a service to run tests for network connections within a kubernetes cluster.'
-  termsOfService: https://k8beltester.github.com/terms/
+  description: >-
+    This is a service to run tests for network connections within a kubernetes
+    cluster.
+  termsOfService: 'https://k8beltester.github.com/terms/'
   contact:
     email: lutz.behnke@figo.io
   license:
     name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
   version: 0.1.0
 externalDocs:
   description: Find out more about K8beltester
-  url: https://k8belstester.github.com/
+  url: 'https://k8belstester.github.com/'
 servers:
-- url: https://k8beltester.github.com/v1
+  - url: 'https://k8beltester.github.com/v1/'
 tags:
-- name: listeners
-  description: Everything about opening ports, which the service will listen on.
-  externalDocs:
-    description: Find out more about listener
-    url: https://k8beltester.github.com/listeners
-- name: clients
-  description: Operations about openig connections to other network components.
-  externalDocs:
-    description: Find out more about clients
-    url: https://k8beltester.github.com/clients
+  - name: listeners
+    description: 'Everything about opening ports, which the service will listen on.'
+    externalDocs:
+      description: Find out more about listener
+      url: 'https://k8beltester.github.com/listeners'
+  - name: clients
+    description: Operations about openig connections to other network components.
+    externalDocs:
+      description: Find out more about clients
+      url: 'https://k8beltester.github.com/clients'
 paths:
   /listeners:
     post:
       tags:
-      - listeners
+        - listeners
       summary: Open a listener on a new port
       operationId: addListener
       requestBody:
@@ -43,37 +45,37 @@ paths:
               $ref: '#/components/schemas/Listener'
         required: true
       responses:
-        405:
+        '405':
           description: Invalid input
           content: {}
       security:
-      - k8beltester_auth:
-        - write:listener
-        - read:listener
+        - k8beltester_auth:
+            - 'write:listener'
+            - 'read:listener'
     get:
       tags:
-      - listeners
+        - listeners
       summary: Finds listener
       description: Multiple status values can be provided with comma separated strings
       operationId: findListeners
       parameters:
-      - name: status
-        in: query
-        description: Status values that need to be considered for filter
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: array
-          items:
-            type: string
-            default: available
-            enum:
-            - available
-            - pending
-            - sold
+        - name: status
+          in: query
+          description: Status values that need to be considered for filter
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              default: available
+              enum:
+                - available
+                - pending
+                - sold
       responses:
-        200:
+        '200':
           description: successful operation
           content:
             application/json:
@@ -81,55 +83,55 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Listener'
-        400:
+        '400':
           description: Invalid status value
           content: {}
       security:
-      - k8beltester_auth:
-        - read:listeners
-  /listener/{listenerId}:
+        - k8beltester_auth:
+            - 'read:listeners'
+  '/listener/{listenerId}':
     get:
       tags:
-      - listeners
+        - listeners
       summary: Find listener by ID
       description: Returns a single listener
       operationId: getListenerById
       parameters:
-      - name: listenerId
-        in: path
-        description: ID of listener to return
-        required: true
-        schema:
-          type: integer
-          format: int64
+        - name: listenerId
+          in: path
+          description: ID of listener to return
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-        200:
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Listener'
-        400:
+        '400':
           description: Invalid ID supplied
           content: {}
-        404:
+        '404':
           description: Listener not found
           content: {}
       security:
-      - api_key: []
+        - api_key: []
     post:
       tags:
-      - listeners
+        - listeners
       summary: Updates a listener in the store with form data
       operationId: updateListenerWithForm
       parameters:
-      - name: listenerId
-        in: path
-        description: ID of listener that needs to be updated
-        required: true
-        schema:
-          type: integer
-          format: int64
+        - name: listenerId
+          in: path
+          description: ID of listener that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -142,50 +144,50 @@ paths:
                   type: string
                   description: Updated comma separated list of ports of the listener
       responses:
-        405:
+        '405':
           description: Invalid input
           content: {}
       security:
-      - petstore_auth:
-        - write:pets
-        - read:pets
+        - k8beltester_auth:
+            - 'write:listeners'
+            - 'read:listeners'
     delete:
       tags:
-      - listeners
+        - listeners
       summary: Deletes a listener
       operationId: deleteListener
       parameters:
-      - name: api_key
-        in: header
-        schema:
-          type: string
-      - name: listenerId
-        in: path
-        description: ID of listener that needs to be updated
-        required: true
-        schema:
-          type: integer
-          format: int64
+        - name: api_key
+          in: header
+          schema:
+            type: string
+        - name: listenerId
+          in: path
+          description: ID of listener that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-        400:
+        '400':
           description: Invalid ID supplied
           content: {}
-        404:
-          description: Pet not found
+        '404':
+          description: listener not found
           content: {}
       security:
-      - petstore_auth:
-        - write:pets
-        - read:pets
+        - k8beltester_auth:
+            - 'write:listeners'
+            - 'read:listeners'
 components:
   schemas:
     Listener:
-      required: 
-      - name
-      - port
+      required:
+        - name
+        - port
       type: object
       properties:
-        name: 
+        name:
           type: string
         ports:
           type: array
@@ -199,10 +201,10 @@ components:
       type: oauth2
       flows:
         implicit:
-          authorizationUrl: http://petstore.swagger.io/oauth/dialog
+          authorizationUrl: 'http://k0beltester.github.com/oauth/dialog'
           scopes:
-            write:pets: modify pets in your account
-            read:pets: read your pets
+            'write:listeners': modify listeners
+            'read:listeners': read your listeners
     api_key:
       type: apiKey
       name: api_key
