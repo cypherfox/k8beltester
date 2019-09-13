@@ -23,7 +23,7 @@ tags:
       description: Find out more about listener
       url: 'https://k8beltester.github.com/listeners'
   - name: clients
-    description: Operations about openig connections to other network components.
+    description: Operations about opening connections to other network components.
     externalDocs:
       description: Find out more about clients
       url: 'https://k8beltester.github.com/clients'
@@ -118,7 +118,8 @@ paths:
           description: Listener not found
           content: {}
       security:
-        - api_key: []
+        - k8beltester_auth:
+            - 'read:listeners'
     post:
       tags:
         - listeners
